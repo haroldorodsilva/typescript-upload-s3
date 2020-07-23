@@ -54,9 +54,8 @@ routes.get('/', async (req, res) => {
 //     // const bucketParams = {
 //     //     Bucket: BUCKET_NAME,
 //     //     Delimiter: '/',
-//     //     Prefix: '25038225000400/nfe/',
+//     //     Prefix: 'folder/',
 //     // };
-//     // // '25038225000400/nfe/51200725038225000400550020000985201063311715.xml',
 //     // // await s3.listObjects(bucketParams).promise();
 //     // s3.listObjects(bucketParams, function (err, data) {
 //     //     if (err) {
