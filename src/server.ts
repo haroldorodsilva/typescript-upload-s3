@@ -4,11 +4,10 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 import 'dotenv/config';
-import './database';
+// import './database';
 
 import routes from './routes';
 import AppError from './errors/AppError';
-import uploadConfig from './config/upload';
 
 const app = express();
 
@@ -18,8 +17,6 @@ app.use(cors());
 
 app.disable('x-powered-by');
 app.use(routes);
-
-app.use(express.static(uploadConfig.directory));
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {

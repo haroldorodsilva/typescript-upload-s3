@@ -1,17 +1,15 @@
 import aws from 'aws-sdk';
 import multerS3 from 'multer-s3';
 import crypto from 'crypto';
-import path from 'path';
-
-const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
 
 const { S3_ENDPOINT = '', BUCKET_NAME = '' } = process.env;
+
+// https://www.digitalocean.com/docs/spaces/resources/s3-sdk-examples/
 
 // const spacesEndPoint = new aws.Endpoint(S3_ENDPOINT);
 const s3EndPoint = new aws.S3({ endpoint: S3_ENDPOINT });
 
 export default {
-    directory: tmpFolder,
     storage: multerS3({
         s3: s3EndPoint,
         bucket: BUCKET_NAME,
