@@ -4,6 +4,8 @@
     "main": "src/server.ts",
     "license": "MIT",
     "scripts": {
+        "postinstall": "tsc",
+        "start": "node dist/server.js",
         "dev:server": "ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/server.ts"
     },
     "dependencies": {
