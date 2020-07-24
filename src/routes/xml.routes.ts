@@ -52,8 +52,7 @@ routes.get('/:url*', async (req, res) => {
             return res.send(object.Body);
         }
     } catch (error) {
-        console.log(error.message);
-        throw new AppError('Arquivo não encontrado');
+        console.log(error);
     }
     throw new AppError('Arquivo não encontrado');
 });
