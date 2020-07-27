@@ -8,5 +8,3 @@ Made with Express and MongoDB
 * AWS_ACCESS_KEY_ID=
 * AWS_SECRET_ACCESS_KEY=
 * S3_ENDPOINT=sfo2.digitaloceanspaces.com
-
-

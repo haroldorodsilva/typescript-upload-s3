@@ -12,10 +12,6 @@ const routes = Router();
 routes.post('/', async (req, res) => {
     const { content, path } = req.body;
 
-    // console.log(path, content.split(1, 20));
-    // console.log(req.body);
-    // console.log(req.headers);
-
     if (!content || !path) {
         throw new AppError('Informe o content e o path');
     }
