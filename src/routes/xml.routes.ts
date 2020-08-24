@@ -10,6 +10,7 @@ const s3 = new aws.S3({ endpoint: S3_ENDPOINT });
 const routes = Router();
 
 routes.post('/', async (req, res) => {
+    return false;
     const { content, path } = req.body;
 
     if (!content || !path) {
@@ -31,6 +32,7 @@ routes.post('/', async (req, res) => {
 
 routes.get('/:url*', async (req, res) => {
     const url = `${req.params.url}${req.params[0]}`;
+    return url;
 
     if (!url) {
         throw new AppError('Acesso Negado');
