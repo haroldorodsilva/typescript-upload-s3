@@ -9,49 +9,49 @@ const routes = Router();
 
 routes.post('/', async (req, res) => {
     return false;
-    const { content, path } = req.body;
+    // const { content, path } = req.body;
 
-    if (!content || !path) {
-        throw new AppError('Informe o content e o path');
-    }
+    // if (!content || !path) {
+    //     throw new AppError('Informe o content e o path');
+    // }
 
-    const params = {
-        Body: content,
-        Bucket: BUCKET_NAME,
-        Key: path,
-    };
-    try {
-        const file = await s3.putObject(params).promise();
-        return res.json({ success: !!file?.ETag });
-    } catch (error) {
-        throw new AppError(error.message);
-    }
+    // const params = {
+    //     Body: content,
+    //     Bucket: BUCKET_NAME,
+    //     Key: path,
+    // };
+    // try {
+    //     const file = await s3.putObject(params).promise();
+    //     return res.json({ success: !!file?.ETag });
+    // } catch (error) {
+    //     throw new AppError(error.message);
+    // }
 });
 
 routes.get('/:url*', async (req, res) => {
     const url = `${req.params.url}${req.params[0]}`;
-    return url;
+    // return url;
 
-    if (!url) {
-        throw new AppError('Acesso Negado');
-    }
+    // if (!url) {
+    //     throw new AppError('Acesso Negado');
+    // }
 
-    try {
-        const params = {
-            Bucket: BUCKET_NAME,
-            Key: url,
-        };
+    // try {
+    //     const params = {
+    //         Bucket: BUCKET_NAME,
+    //         Key: url,
+    //     };
 
-        const object = await s3.getObject(params).promise();
+    //     const object = await s3.getObject(params).promise();
 
-        if (object) {
-            res.contentType('application/xml');
-            return res.send(object.Body);
-        }
-    } catch (error) {
-        console.log(error);
-    }
-    throw new AppError('Arquivo não encontrado');
+    //     if (object) {
+    //         res.contentType('application/xml');
+    //         return res.send(object.Body);
+    //     }
+    // } catch (error) {
+    //     console.log(error);
+    // }
+    // throw new AppError('Arquivo não encontrado');
 });
 
 // routes.get('/lista', async (req, res) => {
