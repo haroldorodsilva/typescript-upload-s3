@@ -1,16 +1,14 @@
 import { Router } from 'express';
-import aws from 'aws-sdk';
-
+import { google } from 'googleapis';
 import AppError from '../errors/AppError';
 
-const { S3_ENDPOINT = '', BUCKET_NAME = '' } = process.env;
-
-const s3 = new aws.S3({ endpoint: S3_ENDPOINT });
+const { DRIVE_CLIENT_ID = '', DRIVE_CLIENT_SECRET = '' } = process.env;
+const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
 
 const routes = Router();
 
 routes.post('/', async (req, res) => {
-    return res.json({ success: false });
+    return false;
     const { content, path } = req.body;
 
     if (!content || !path) {
