@@ -6,16 +6,23 @@ import cors from 'cors';
 import 'dotenv/config';
 // import './database';
 
+import { driver } from './backup';
+
 import routes from './routes';
 import AppError from './errors/AppError';
 
 const app = express();
-
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors());
 
 app.disable('x-powered-by');
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+    req.driver = driver;
+    next();
+});
+
 app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

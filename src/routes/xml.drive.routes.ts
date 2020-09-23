@@ -1,31 +1,45 @@
 import { Router } from 'express';
-import { google } from 'googleapis';
+import { file } from 'googleapis/build/src/apis/file';
 import AppError from '../errors/AppError';
 
-const { DRIVE_CLIENT_ID = '', DRIVE_CLIENT_SECRET = '' } = process.env;
-const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
-
 const routes = Router();
+const backupFolder = 'backup_infonotas';
+
+interface IFilePost {
+    content: string;
+    path: string;
+}
 
 routes.post('/', async (req, res) => {
-    return false;
-    // const { content, path } = req.body;
+    const { content, path } = req.body as IFilePost;
 
-    // if (!content || !path) {
-    //     throw new AppError('Informe o content e o path');
-    // }
+    if (!content || !path) {
+        throw new AppError('Informe o content e o path');
+    }
 
-    // const params = {
-    //     Body: content,
-    //     Bucket: BUCKET_NAME,
-    //     Key: path,
-    // };
-    // try {
-    //     const file = await s3.putObject(params).promise();
-    //     return res.json({ success: !!file?.ETag });
-    // } catch (error) {
-    //     throw new AppError(error.message);
-    // }
+    try {
+        const folders = [backupFolder, ...path.split('/')];
+        const fileName = folders.pop();
+
+        let id = await req.driver.findPath(folders);
+        if (!id) {
+            id = await req.driver.createPath(folders);
+        }
+
+        if (!id || !fileName) {
+            throw new AppError('Sem nome do arquivo ou ID da pasta');
+        }
+
+        const newID = await req.driver.createFile(
+            fileName,
+            content,
+            'text/xml',
+            id,
+        );
+        return res.json({ success: !!newID });
+    } catch (error) {
+        throw new AppError(error.message);
+    }
 });
 
 routes.get('/:url*', async (req, res) => {
