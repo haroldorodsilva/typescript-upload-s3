@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { google, drive_v3 } from 'googleapis';
+import { google, drive_v3, Auth } from 'googleapis';
 import readline from 'readline';
 
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
@@ -48,9 +48,9 @@ export interface IDriver {
 }
 
 class Driver implements IDriver {
-    private oAuth2Client;
-
     private drive: drive_v3.Drive;
+
+    private oAuth2Client: Auth.OAuth2Client;
 
     private credential: IDriveCredential;
 
