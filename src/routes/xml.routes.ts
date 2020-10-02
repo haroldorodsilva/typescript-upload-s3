@@ -1,29 +1,18 @@
 import { Router } from 'express';
-import aws from 'aws-sdk';
-
 import AppError from '../errors/AppError';
-
-const { S3_ENDPOINT = '', BUCKET_NAME = '' } = process.env;
-
-const s3 = new aws.S3({ endpoint: S3_ENDPOINT });
 
 const routes = Router();
 
 routes.post('/', async (req, res) => {
-    // return res.json({ success: false });
     const { content, path } = req.body;
 
     if (!content || !path) {
         throw new AppError('Informe o content e o path');
     }
 
-    const params = {
-        Body: content,
-        Bucket: BUCKET_NAME,
-        Key: path,
-    };
     try {
-        const file = await s3.putObject(params).promise();
+        const file = await req.aws.createFile({ Body: content, Key: path });
+        console.log(file);
         return res.json({ success: !!file?.ETag });
     } catch (error) {
         throw new AppError(error.message);
@@ -32,27 +21,22 @@ routes.post('/', async (req, res) => {
 
 routes.get('/:url*', async (req, res) => {
     const url = `${req.params.url}${req.params[0]}`;
-    // return url;
 
     if (!url) {
         throw new AppError('Acesso Negado');
     }
 
     try {
-        const params = {
-            Bucket: BUCKET_NAME,
-            Key: url,
-        };
-
-        const object = await s3.getObject(params).promise();
+        const object = await req.aws.findFile({ Key: url });
 
         if (object) {
             res.contentType('application/xml');
-            return res.send(object.Body);
+            return res.send(object);
         }
     } catch (error) {
         console.log(error);
     }
+
     throw new AppError('Arquivo não encontrado');
 });
 

@@ -6,7 +6,7 @@ import cors from 'cors';
 import 'dotenv/config';
 // import './database';
 
-// import { driver } from './backup';
+import { AWS } from './backup';
 
 import routes from './routes';
 import AppError from './errors/AppError';
@@ -18,10 +18,11 @@ app.use(cors());
 
 app.disable('x-powered-by');
 
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//     req.driver = driver;
-//     next();
-// });
+app.use((req: Request, res: Response, next: NextFunction) => {
+    // req.driver = driver;
+    req.aws = AWS;
+    next();
+});
 
 app.use(routes);
 
