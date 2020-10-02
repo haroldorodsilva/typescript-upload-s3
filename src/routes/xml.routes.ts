@@ -12,7 +12,7 @@ routes.post('/', async (req, res) => {
 
     try {
         const file = await req.aws.createFile({ Body: content, Key: path });
-        console.log(file);
+        // console.log(file);
         return res.json({ success: !!file?.ETag });
     } catch (error) {
         throw new AppError(error.message);
