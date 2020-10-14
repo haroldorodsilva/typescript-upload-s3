@@ -7,7 +7,7 @@ declare global {
         interface Request {
             driver: IDriver;
             aws: IAWS;
-            errorNotify: IErrorNotify;
+            errorHandler: IErrorNotify;
         }
 
         namespace Multer {

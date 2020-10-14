@@ -20,7 +20,7 @@ app.disable('x-powered-by');
 app.use((req: Request, res: Response, next: NextFunction) => {
     // req.driver = driver;
     // req.aws = AWS;
-    req.errorNotify = ErrorNotify;
+    req.errorHandler = ErrorNotify;
     next();
 });
 
