@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { file } from 'googleapis/build/src/apis/file';
 import AppError from '../errors/AppError';
 
 const routes = Router();

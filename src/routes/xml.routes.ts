@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import AppError from '../errors/AppError';
+import { AWS } from '../backup';
 
 const routes = Router();
 
@@ -10,8 +11,9 @@ routes.post('/', async (req, res) => {
         throw new AppError('Informe o content e o path');
     }
 
+
     try {
-        const file = await req.aws.createFile({ Body: content, Key: path });
+        const file = await AWS.createFile({ Body: content, Key: path });
         // console.log(file);
         return res.json({ success: !!file?.ETag });
     } catch (error) {
@@ -27,7 +29,7 @@ routes.get('/:url*', async (req, res) => {
     }
 
     try {
-        const object = await req.aws.findFile({ Key: url });
+        const object = await AWS.findFile({ Key: url });
 
         if (object) {
             res.contentType('application/xml');

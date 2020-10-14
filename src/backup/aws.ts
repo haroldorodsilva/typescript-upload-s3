@@ -1,5 +1,4 @@
 import aws from 'aws-sdk';
-import AppError from '../errors/AppError';
 
 interface IAWSCreateFile {
     Body: string;
