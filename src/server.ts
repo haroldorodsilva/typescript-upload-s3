@@ -4,12 +4,11 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 import 'dotenv/config';
-// import './database';
-
-// import { AWS } from './backup';
+import 'newrelic';
 
 import routes from './routes';
 import AppError from './errors/AppError';
+import ErrorNotify from './errors/ErrorNotify';
 
 const app = express();
 app.use(express.json());
@@ -21,6 +20,7 @@ app.disable('x-powered-by');
 app.use((req: Request, res: Response, next: NextFunction) => {
     // req.driver = driver;
     // req.aws = AWS;
+    req.errorNotify = ErrorNotify;
     next();
 });
 

@@ -11,12 +11,11 @@ routes.post('/', async (req, res) => {
         throw new AppError('Informe o content e o path');
     }
 
-
     try {
         const file = await AWS.createFile({ Body: content, Key: path });
         // console.log(file);
         return res.json({ success: !!file?.ETag });
-    } catch (error) {
+    } catch (error: Exception) {
         throw new AppError(error.message);
     }
 });

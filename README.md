@@ -11,3 +11,8 @@ Made with Express and MongoDB
 
 * DRIVE_CREDENTIAL={}
 * DRIVE_TOKEN={}
+
+* BUGSNAG_API_KEY=
+
+*NEW_RELIC_LICENSE_KEY=
+*NEW_RELIC_LOG=stdout
