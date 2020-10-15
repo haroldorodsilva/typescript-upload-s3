@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 
@@ -30,7 +30,6 @@ app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     ErrorNotify.notify(err);
-    console.log('[body]', req.body);
 
     if (err instanceof AppError) {
         return res.status(err.statusCode).json({
