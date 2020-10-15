@@ -2,21 +2,22 @@ import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 import morgan from 'morgan';
 import cors from 'cors';
-import { AWS } from './backup';
-
+import helmet from 'helmet';
 import 'dotenv/config';
 // import 'newrelic';
 
+import { AWS } from './backup';
 import routes from './routes';
 import AppError from './errors/AppError';
 import ErrorNotify from './errors/ErrorNotify';
 
 const app = express();
-app.use(express.json());
+app.disable('x-powered-by');
+app.use(express.json({ limit: '10MB' }));
+
+app.use(helmet());
 // app.use(morgan('dev'));
 app.use(cors());
-
-app.disable('x-powered-by');
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     // req.driver = driver;
