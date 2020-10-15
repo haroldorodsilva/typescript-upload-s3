@@ -10,7 +10,7 @@ routes.post('/', async (req, res) => {
     if (!content || !path) {
         throw new AppError('Informe o content e o path');
     }
-
+    console.log('[key][post]', path);
     try {
         const file = await AWS.createFile({ Body: content, Key: path });
         // console.log(file);

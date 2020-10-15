@@ -12,7 +12,7 @@ import ErrorNotify from './errors/ErrorNotify';
 
 const app = express();
 app.use(express.json());
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(cors());
 
 app.disable('x-powered-by');
