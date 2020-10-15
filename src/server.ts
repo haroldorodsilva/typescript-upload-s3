@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 import 'dotenv/config';
-import 'newrelic';
+// import 'newrelic';
 
 import routes from './routes';
 import AppError from './errors/AppError';
