@@ -3,8 +3,9 @@ import 'express-async-errors';
 import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
+
 import 'dotenv/config';
-// import 'newrelic';
+import 'newrelic';
 
 import { AWS } from './backup';
 import routes from './routes';
