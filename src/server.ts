@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 import morgan from 'morgan';
 import cors from 'cors';
+import { AWS } from './backup';
 
 import 'dotenv/config';
 // import 'newrelic';
@@ -19,7 +20,7 @@ app.disable('x-powered-by');
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     // req.driver = driver;
-    // req.aws = AWS;
+    req.aws = AWS;
     next();
 });
 
