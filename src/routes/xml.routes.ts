@@ -13,10 +13,8 @@ routes.post('/', async (req, res) => {
     console.log('[key][post]', path);
     try {
         const file = await AWS.createFile({ Body: content, Key: path });
-        // console.log(file);
         return res.json({ success: !!file?.ETag });
     } catch (error) {
-        req.errorHandler.notify(error);
         throw new AppError(error.message);
     }
 });
@@ -36,8 +34,7 @@ routes.get('/:url*', async (req, res) => {
             return res.send(object);
         }
     } catch (error) {
-        req.errorHandler.notify(error);
-        console.log(error);
+        throw new AppError(error.message);
     }
 
     throw new AppError('Arquivo não encontrado');

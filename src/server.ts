@@ -12,7 +12,7 @@ import ErrorNotify from './errors/ErrorNotify';
 
 const app = express();
 app.use(express.json());
-//app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(cors());
 
 app.disable('x-powered-by');
@@ -20,21 +20,20 @@ app.disable('x-powered-by');
 app.use((req: Request, res: Response, next: NextFunction) => {
     // req.driver = driver;
     // req.aws = AWS;
-    req.errorHandler = ErrorNotify;
     next();
 });
 
 app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    ErrorNotify.notify(err);
+
     if (err instanceof AppError) {
         return res.status(err.statusCode).json({
             status: 'error',
             message: err.message,
         });
     }
-
-    ErrorNotify.notify(err);
     console.error(err);
 
     return res.status(500).json({
