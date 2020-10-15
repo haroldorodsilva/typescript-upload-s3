@@ -27,6 +27,7 @@ app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     ErrorNotify.notify(err);
+    console.log('[body]', req.body);
 
     if (err instanceof AppError) {
         return res.status(err.statusCode).json({
@@ -35,7 +36,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         });
     }
     console.error(err);
-    console.log(req.body);
 
     return res.status(500).json({
         status: 'error',
