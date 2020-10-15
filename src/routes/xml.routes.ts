@@ -4,8 +4,6 @@ import AppError from '../errors/AppError';
 const routes = Router();
 
 routes.post('/', async (req, res) => {
-    return res.json({ success: false });
-
     const { content, path } = req.body;
 
     if (!content || !path) {
