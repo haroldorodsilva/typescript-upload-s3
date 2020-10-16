@@ -5,12 +5,14 @@ export interface IErrorNotify {
 }
 
 class ErrorNotify implements IErrorNotify {
+    private apiKey = process.env.BUGSNAG_API_KEY || '';
+
     constructor() {
-        Bugsnag.start(process.env.BUGSNAG_API_KEY || '');
+        if (this.apiKey) Bugsnag.start(this.apiKey);
     }
 
     notify = (e: NotifiableError): void => {
-        Bugsnag.notify(e);
+        if (this.apiKey) Bugsnag.notify(e);
     };
 }
 

@@ -14,6 +14,7 @@ interface IAWSFindFile {
 export interface IAWS {
     createFile(data: IAWSCreateFile): Promise<aws.S3.PutObjectOutput>;
     findFile(data: IAWSFindFile): Promise<string>;
+    listFolder(data: IAWSFindFile): Promise<string[]>;
 }
 
 class AWS implements IAWS {
@@ -54,6 +55,35 @@ class AWS implements IAWS {
         }
 
         return '';
+    };
+
+    listFolder = async (data: IAWSFindFile): Promise<string[]> => {
+        const params = {
+            Delimiter: '/',
+            Prefix: data.Key,
+            Bucket: data.Bucket ? data.Bucket : this.BUCKET_NAME,
+            MaxKeys: 5000,
+            Marker: '',
+        };
+        const list: string[] = [];
+
+        do {
+            // eslint-disable-next-line no-await-in-loop
+            const object = await this.s3.listObjects(params).promise();
+            if (object.Contents) {
+                object.Contents.map(({ Key }) => {
+                    if (Key) {
+                        const name = String(Key.split('/')[3]);
+                        if (name) list.push(name);
+                    }
+                    return '';
+                });
+            }
+
+            params.Marker = object.NextMarker || '';
+        } while (params.Marker);
+
+        return list;
     };
 }
 

@@ -18,7 +18,7 @@ routes.post('/', async (req, res) => {
     }
 });
 
-routes.get('/:url*', async (req, res) => {
+routes.get('/view/:url*', async (req, res) => {
     const url = `${req.params.url}${req.params[0]}`;
 
     if (!url) {
@@ -39,26 +39,27 @@ routes.get('/:url*', async (req, res) => {
     throw new AppError('Arquivo não encontrado');
 });
 
-// routes.get('/lista', async (req, res) => {
-//     // const bucketParams = {
-//     //     Bucket: BUCKET_NAME,
-//     //     Delimiter: '/',
-//     //     Prefix: 'folder/',
-//     // };
-//     // // await s3.listObjects(bucketParams).promise();
-//     // s3.listObjects(bucketParams, function (err, data) {
-//     //     if (err) {
-//     //         console.log('Error', err);
-//     //     } else {
-//     //         data.Contents.forEach(({ Key }) => {
-//     //             console.log(`https://${BUCKET_NAME}.${S3_ENDPOINT}/${Key}`);
-//     //         });
-//     //         console.log('Success', data);
-//     //     }
-//     // });
+routes.post('/list', async (req, res) => {
+    const { doc, ano, modelo } = req.body;
 
-//     return res.json({ ok: true });
-// });
+    if (!doc || !ano || !modelo) {
+        throw new AppError('Informe o Doc, Ano e Modelo.');
+    }
+
+    try {
+        const object = await req.aws.listFolder({
+            Key: `${doc}/${ano}/${modelo}/`,
+        });
+
+        if (object) {
+            return res.json({ length: object.length, list: object });
+        }
+    } catch (error) {
+        throw new AppError(error.message);
+    }
+
+    throw new AppError('Listagem não encontrada');
+});
 
 // import multer from 'multer';
 // import uploadConfig from '../config/upload';
