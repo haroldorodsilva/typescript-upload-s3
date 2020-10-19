@@ -29,14 +29,19 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    ErrorNotify.notify(err);
-
     if (err instanceof AppError) {
+        ErrorNotify.notify({
+            errorClass: 'AppError',
+            errorMessage: err.message,
+        });
+
         return res.status(err.statusCode).json({
             status: 'error',
             message: err.message,
         });
     }
+
+    ErrorNotify.notify(err);
     console.error(err);
 
     return res.status(500).json({
