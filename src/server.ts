@@ -30,11 +30,6 @@ app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {
-        ErrorNotify.notify({
-            errorClass: 'AppError',
-            errorMessage: err.message,
-        });
-
         return res.status(err.statusCode).json({
             status: 'error',
             message: err.message,
