@@ -5,7 +5,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 
 import 'dotenv/config';
-import 'newrelic';
+// import 'newrelic';
 
 import { AWS } from './backup';
 import routes from './routes';
