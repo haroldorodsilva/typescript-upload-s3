@@ -4,6 +4,9 @@ Made with Express and MongoDB
 # enviroment variables (.env)
 * PORT
 * MONGODB_URI=mongodb://localhost:27017/spaces
+* AUTH_API=
+* AUTH_TOKEN=
+* JWT_SECRET=
 * BUCKET_NAME=my-spaces
 * AWS_ACCESS_KEY_ID=
 * AWS_SECRET_ACCESS_KEY=

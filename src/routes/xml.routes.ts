@@ -19,8 +19,6 @@ routes.post('/', async (req, res) => {
 });
 
 routes.get('/view/:url*', async (req, res) => {
-    throw new AppError('Acesso Negado');
-
     const url = `${req.params.url}${req.params[0]}`;
 
     if (!url) {
@@ -42,8 +40,6 @@ routes.get('/view/:url*', async (req, res) => {
 });
 
 routes.post('/list', async (req, res) => {
-    throw new AppError('Acesso Negado');
-
     const { doc, ano, modelo } = req.body;
 
     if (!doc || !ano || !modelo) {

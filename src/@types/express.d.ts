@@ -4,6 +4,7 @@ import { IDriver } from '../backup/driver';
 declare global {
     declare namespace Express {
         interface Request {
+            userId: string;
             driver: IDriver;
             aws: IAWS;
         }
