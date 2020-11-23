@@ -11,6 +11,7 @@ interface IClienteLicenca {
         cliente: number;
         validade: string;
         baixarxml: string;
+        autorizados: string[];
     };
 }
 
@@ -37,7 +38,7 @@ class AuthController {
             return res.json({ error: data.error }).status(401);
         }
 
-        const { validade, baixarxml } = data.result;
+        const { validade, baixarxml, autorizados } = data.result;
 
         const parsedDate = parseISO(validade);
         const znDate = zonedTimeToUtc(new Date(), 'America/Sao_Paulo');
@@ -48,7 +49,7 @@ class AuthController {
         if (!isValid || baixarxml !== 'S')
             return res.json({ error: 'Não autorizado' }).status(401);
 
-        const token = jwt.sign({ id: cliente }, secret, {
+        const token = jwt.sign({ id: cliente, autorizados }, secret, {
             expiresIn: '1d',
         });
 

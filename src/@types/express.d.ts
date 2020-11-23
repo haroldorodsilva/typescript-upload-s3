@@ -1,10 +1,16 @@
 import { IAWS } from '../backup/aws';
 import { IDriver } from '../backup/driver';
 
+interface IUserData {
+    id: string;
+    doc: string;
+    autorizados: string[];
+}
+
 declare global {
     declare namespace Express {
         interface Request {
-            userId: string;
+            user: IUserData;
             driver: IDriver;
             aws: IAWS;
         }

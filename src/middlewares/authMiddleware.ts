@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 interface TokenPayload {
     id: string;
+    autorizados: string[];
     iat: number;
     exp: number;
 }
@@ -13,8 +14,9 @@ export default function authMiddleware(
     next: NextFunction,
 ) {
     const { authorization } = req.headers;
+    const cnpj = req.headers['x-doc'];
 
-    if (!authorization) {
+    if (!authorization || !cnpj) {
         return res.sendStatus(401);
     }
 
@@ -23,11 +25,15 @@ export default function authMiddleware(
 
     try {
         const data = jwt.verify(token, secret);
-        const { id } = data as TokenPayload;
-        req.userId = id;
+        const { id, autorizados } = data as TokenPayload;
+
+        if (!autorizados.includes(`${cnpj}`)) return res.sendStatus(401);
+
+        req.user = { id, autorizados, doc: `${cnpj}` };
 
         return next();
-    } catch {
+    } catch (e) {
+        console.log(e.message);
         return res.sendStatus(401);
     }
 }

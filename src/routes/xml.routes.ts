@@ -4,12 +4,19 @@ import AppError from '../errors/AppError';
 const routes = Router();
 
 routes.post('/', async (req, res) => {
-    const { content, path } = req.body;
+    const { cnpj, ano, modelo, nome, content } = req.body;
 
-    if (!content || !path) {
-        throw new AppError('Informe o content e o path');
+    if (!content || !cnpj || !ano || !modelo || !nome) {
+        throw new AppError('Informe todos os dados');
     }
+
+    const { autorizados } = req.user;
+    if (!autorizados.includes(cnpj)) return res.sendStatus(401);
+
+    const path = `${cnpj}/${ano}/${modelo}/${nome}`;
+
     console.log('[key][post]', path);
+
     try {
         const file = await req.aws.createFile({ Body: content, Key: path });
         return res.json({ success: !!file?.ETag });
@@ -18,12 +25,24 @@ routes.post('/', async (req, res) => {
     }
 });
 
-routes.get('/view/:url*', async (req, res) => {
-    const url = `${req.params.url}${req.params[0]}`;
-
-    if (!url) {
-        throw new AppError('Acesso Negado');
+routes.post('/view', async (req, res) => {
+    const { cnpj, ano, modelo, nome } = req.body;
+    /**
+     * {
+        "cnpj": "37509833000605",
+        "ano": "2020",
+        "modelo": "nfe",
+        "nome": "51201137509833000605550010001774151204166302-nfe.xml"
     }
+    */
+    if (!cnpj || !ano || !modelo || !nome) {
+        throw new AppError('Informe os dados do arquivo');
+    }
+
+    const { autorizados } = req.user;
+    if (!autorizados.includes(cnpj)) return res.sendStatus(401);
+
+    const url = `${cnpj}/${ano}/${modelo}/${nome}`;
 
     try {
         const object = await req.aws.findFile({ Key: url });
@@ -40,11 +59,14 @@ routes.get('/view/:url*', async (req, res) => {
 });
 
 routes.post('/list', async (req, res) => {
-    const { doc, ano, modelo } = req.body;
+    const { cnpj, doc, ano, modelo } = req.body;
 
-    if (!doc || !ano || !modelo) {
-        throw new AppError('Informe o Doc, Ano e Modelo.');
+    if (!cnpj || !doc || !ano || !modelo) {
+        throw new AppError('Informe os dados');
     }
+
+    const { autorizados } = req.user;
+    if (!autorizados.includes(cnpj)) return res.sendStatus(401);
 
     try {
         const object = await req.aws.listFolder({
@@ -60,6 +82,9 @@ routes.post('/list', async (req, res) => {
 
     throw new AppError('Listagem não encontrada');
 });
+
+// routes.post('/view/:url*', async (req, res) => {
+//     const url = `${req.params.url}${req.params[0]}`;
 
 // import multer from 'multer';
 // import uploadConfig from '../config/upload';
