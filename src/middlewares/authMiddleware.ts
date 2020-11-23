@@ -33,7 +33,7 @@ export default function authMiddleware(
 
         return next();
     } catch (e) {
-        console.log(e.message);
+        // console.log(e.message);
         return res.sendStatus(401);
     }
 }
