@@ -33,8 +33,7 @@ routes.post('/view', async (req, res) => {
         "ano": "2020",
         "modelo": "nfe",
         "nome": "51201137509833000605550010001774151204166302-nfe.xml"
-    }
-    */
+    }    */
     if (!cnpj || !ano || !modelo || !nome) {
         throw new AppError('Informe os dados do arquivo');
     }
