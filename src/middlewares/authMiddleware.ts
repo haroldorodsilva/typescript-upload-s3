@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import AppError from '../errors/AppError';
 
 interface TokenPayload {
     id: string;
@@ -17,7 +18,7 @@ export default function authMiddleware(
     const cnpj = req.headers['x-doc'];
 
     if (!authorization || !cnpj) {
-        return res.sendStatus(401);
+        throw new AppError('Não autorizado', 401);
     }
 
     const secret = process.env.JWT_SECRET || '~m|ZMw5xc_xc]r=fY6|K<=.@uyIaFO';
@@ -34,6 +35,6 @@ export default function authMiddleware(
         return next();
     } catch (e) {
         // console.log(e.message);
-        return res.sendStatus(401);
+        throw new AppError('Não autorizado', 401);
     }
 }
