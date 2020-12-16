@@ -6,7 +6,9 @@ const routes = Router();
 routes.post('/', async (req, res) => {
     const { cnpj, ano, modelo, nome, content } = req.body;
 
-    if (!content || !cnpj || !ano || !modelo || !nome) {
+    if (!content) return res.json({ success: false });
+
+    if (!cnpj || !ano || !modelo || !nome) {
         throw new AppError('Informe todos os dados');
     }
 
