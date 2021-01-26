@@ -69,7 +69,7 @@ class AWS implements IAWS {
             Delimiter: '/',
             Prefix: data.Key,
             Bucket: data.Bucket ? data.Bucket : this.BUCKET_NAME,
-            MaxKeys: 10000,
+            MaxKeys: 5000,
             Marker: data.marker || '',
         };
         const list: string[] = [];
