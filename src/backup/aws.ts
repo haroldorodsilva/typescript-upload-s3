@@ -9,13 +9,13 @@ interface IAWSCreateFile {
 interface IAWSFindFile {
     Key: string;
     Bucket?: string;
-    marker?: string;
+    token?: string;
 }
 
 interface IAWSListFolder {
     length: number;
     list: string[];
-    marker: string;
+    token?: string;
 }
 
 export interface IAWS {
@@ -70,11 +70,15 @@ class AWS implements IAWS {
             Prefix: data.Key,
             Bucket: data.Bucket ? data.Bucket : this.BUCKET_NAME,
             MaxKeys: 5000,
-            Marker: data.marker || '',
+            ContinuationToken: data.token || undefined,
         };
+        console.log(data, params);
+
+        // Marker: data.marker || '',
         const list: string[] = [];
 
-        const object = await this.s3.listObjects(params).promise();
+        const object = await this.s3.listObjectsV2(params).promise();
+
         if (object.Contents) {
             object.Contents.map(({ Key }) => {
                 if (Key) {
@@ -85,9 +89,11 @@ class AWS implements IAWS {
             });
         }
 
-        params.Marker = object.NextMarker || '';
-
-        return { marker: params.Marker, length: list.length, list };
+        return {
+            token: object.NextContinuationToken || '',
+            length: list.length,
+            list,
+        };
     };
 }
 

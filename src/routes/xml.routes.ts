@@ -60,7 +60,7 @@ routes.post('/view', async (req, res) => {
 });
 
 routes.post('/list', async (req, res) => {
-    const { cnpj, ano, modelo, marker } = req.body;
+    const { cnpj, ano, modelo, token } = req.body;
 
     if (!cnpj || !ano || !modelo) {
         throw new AppError('Informe os dados');
@@ -72,7 +72,7 @@ routes.post('/list', async (req, res) => {
     try {
         const object = await req.aws.listFolder({
             Key: `${cnpj}/${ano}/${modelo}/`,
-            marker,
+            token,
         });
 
         if (object) return res.json(object);
