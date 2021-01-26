@@ -87,7 +87,7 @@ class AWS implements IAWS {
 
         params.Marker = object.NextMarker || '';
 
-        return { length: list.length, list, marker: params.Marker };
+        return { marker: params.Marker, length: list.length, list };
     };
 }
 
