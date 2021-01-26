@@ -9,12 +9,19 @@ interface IAWSCreateFile {
 interface IAWSFindFile {
     Key: string;
     Bucket?: string;
+    marker?: string;
+}
+
+interface IAWSListFolder {
+    length: number;
+    list: string[];
+    marker: string;
 }
 
 export interface IAWS {
     createFile(data: IAWSCreateFile): Promise<aws.S3.PutObjectOutput>;
     findFile(data: IAWSFindFile): Promise<string>;
-    listFolder(data: IAWSFindFile): Promise<string[]>;
+    listFolder(data: IAWSFindFile): Promise<IAWSListFolder>;
 }
 
 class AWS implements IAWS {
@@ -57,33 +64,30 @@ class AWS implements IAWS {
         return '';
     };
 
-    listFolder = async (data: IAWSFindFile): Promise<string[]> => {
+    listFolder = async (data: IAWSFindFile): Promise<IAWSListFolder> => {
         const params = {
             Delimiter: '/',
             Prefix: data.Key,
             Bucket: data.Bucket ? data.Bucket : this.BUCKET_NAME,
-            MaxKeys: 5000,
-            Marker: '',
+            MaxKeys: 10000,
+            Marker: data.marker || '',
         };
         const list: string[] = [];
 
-        do {
-            // eslint-disable-next-line no-await-in-loop
-            const object = await this.s3.listObjects(params).promise();
-            if (object.Contents) {
-                object.Contents.map(({ Key }) => {
-                    if (Key) {
-                        const name = String(Key.split('/')[3]);
-                        if (name) list.push(name);
-                    }
-                    return '';
-                });
-            }
+        const object = await this.s3.listObjects(params).promise();
+        if (object.Contents) {
+            object.Contents.map(({ Key }) => {
+                if (Key) {
+                    const name = String(Key.split('/')[3]);
+                    if (name) list.push(name);
+                }
+                return '';
+            });
+        }
 
-            params.Marker = object.NextMarker || '';
-        } while (params.Marker);
+        params.Marker = object.NextMarker || '';
 
-        return list;
+        return { length: list.length, list, marker: params.Marker };
     };
 }
 

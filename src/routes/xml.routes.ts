@@ -60,9 +60,9 @@ routes.post('/view', async (req, res) => {
 });
 
 routes.post('/list', async (req, res) => {
-    const { cnpj, doc, ano, modelo } = req.body;
+    const { cnpj, ano, modelo } = req.body;
 
-    if (!cnpj || !doc || !ano || !modelo) {
+    if (!cnpj || !ano || !modelo) {
         throw new AppError('Informe os dados');
     }
 
@@ -71,12 +71,10 @@ routes.post('/list', async (req, res) => {
 
     try {
         const object = await req.aws.listFolder({
-            Key: `${doc}/${ano}/${modelo}/`,
+            Key: `${cnpj}/${ano}/${modelo}/`,
         });
 
-        if (object) {
-            return res.json({ length: object.length, list: object });
-        }
+        if (object) return res.json(object);
     } catch (error) {
         throw new AppError(error.message);
     }
