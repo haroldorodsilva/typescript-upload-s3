@@ -72,8 +72,6 @@ class AWS implements IAWS {
             MaxKeys: 5000,
             ContinuationToken: data.token || undefined,
         };
-        console.log(data, params);
-
         // Marker: data.marker || '',
         const list: string[] = [];
 
