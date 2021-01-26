@@ -18,17 +18,23 @@ interface IClienteLicenca {
 
 class AuthController {
     async authenticate(req: Request, res: Response) {
-        const { cliente } = req.body;
+        const { cliente, cnpj } = req.body;
         const url = process.env.AUTH_API || null;
         const tokenAuth = process.env.AUTH_TOKEN || null;
         const secret =
             process.env.JWT_SECRET || '~m|ZMw5xc_xc]r=fY6|K<=.@uyIaFO';
 
-        if (!cliente || !url || !tokenAuth || !secret) {
+        if (!cliente && !cnpj) {
             throw new AppError('Não autorizado', 401);
         }
 
-        const request = await axios.get(`${url}/licenca/${cliente}`, {
+        if (!url || !tokenAuth || !secret) {
+            throw new AppError('Não autorizado', 401);
+        }
+
+        const path = cnpj ? `licenca/cnpj/${cnpj}` : `licenca/${cliente}`;
+
+        const request = await axios.get(`${url}/${path}`, {
             headers: {
                 'X-Token': tokenAuth,
             },
